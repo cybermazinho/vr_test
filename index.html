@@ -1,68 +1,26 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>VR Cubo Interativo</title>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Exemplo A-Frame com Controles do Quest 2</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://rawgit.com/donmccurdy/aframe-extras/v6.1.2/dist/aframe-extras.min.js"></script>
-    <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
-  </head>
-  <body>
-    <a-scene>
-      <!-- Configuração do chão -->
-      <a-plane
-        color="#7BC8A4"
-        rotation="-90 0 0"
-        width="30"
-        height="30"
-      ></a-plane>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.1.0/dist/aframe-extras.min.js"></script>
+</head>
+<body>
+    <a-scene oculus-touch-controls-enabled>
+        <!-- Chão verde -->
+        <a-plane position="0 0 -4" rotation="-90 0 0" width="20" height="20" color="green"></a-plane>
 
-      <!-- Configuração da mesa (cubo grande) -->
-      <a-box
-        position="0 0.75 -3" <!-- Altura ajustada para a altura da cintura -->
-        color="brown"
-        depth="3"
-        height="1.5" <!-- Ajuste de altura -->
-        width="3"
-      ></a-box>
+        <!-- Controle de câmera -->
+        <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
 
-      <!-- Configuração do cubo menor em cima da mesa -->
-      <a-box
-        id="cubo-interativo"
-        position="0 2.5 -3" <!-- Ajuste de altura -->
-        color="blue"
-        depth="1"
-        height="0.5"
-        width="1"
-        grabbable
-        dynamic-body
-      ></a-box>
+        <!-- Cubos amarelos para as mãos -->
+        <a-entity oculus-touch-controls="hand: left" mixin="yellowCube" scale="0.05 0.05 0.05" position="-0.5 0 -1"></a-entity>
+        <a-entity oculus-touch-controls="hand: right" mixin="yellowCube" scale="0.05 0.05 0.05" position="0.5 0 -1"></a-entity>
 
-      <!-- Configuração da câmera -->
-      <a-entity camera look-controls wasd-controls></a-entity>
-
-      <!-- Configuração das mãos do VR Quest -->
-      <a-entity
-        laser-controls="hand: left"
-        raycaster="objects: .grabbable"
-        line="color: red"
-        teleport-controls
-        super-hands
-        collision-filter="collisionForces: true;"
-        stretchable
-        sphere-collider="objects: .grabbable"
-        haptics="force: 0.1"
-      ></a-entity>
-      <a-entity
-        laser-controls="hand: right"
-        raycaster="objects: .grabbable"
-        line="color: blue"
-        teleport-controls
-        super-hands
-        collision-filter="collisionForces: true;"
-        stretchable
-        sphere-collider="objects: .grabbable"
-        haptics="force: 0.1"
-      ></a-entity>
+        <!-- Mixin para definir a cor dos cubos amarelos -->
+        <a-mixin id="yellowCube" geometry="primitive: box" material="color: yellow"></a-mixin>
     </a-scene>
-  </body>
+</body>
 </html>
