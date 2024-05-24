@@ -13,14 +13,36 @@
         <a-plane position="0 0 -4" rotation="-90 0 0" width="20" height="20" color="green"></a-plane>
 
         <!-- Controle de câmera -->
-        <a-entity camera look-controls wasd-controls position="0 1.6 0"></a-entity>
+        <a-entity id="cameraRig" position="0 0 0">
+            <a-entity camera look-controls wasd-controls-enabled="false" position="0 1.6 0" movement-controls></a-entity>
+        </a-entity>
 
         <!-- Cubos amarelos para as mãos -->
-        <a-entity oculus-touch-controls="hand: left" mixin="yellowCube" scale="0.05 0.05 0.05" position="-0.5 0 -1"></a-entity>
-        <a-entity oculus-touch-controls="hand: right" mixin="yellowCube" scale="0.05 0.05 0.05" position="0.5 0 -1"></a-entity>
+        <a-entity id="leftHand" mixin="yellowCube" scale="0.05 0.05 0.05" position="-0.5 0 -1"></a-entity>
+        <a-entity id="rightHand" mixin="yellowCube" scale="0.05 0.05 0.05" position="0.5 0 -1"></a-entity>
 
         <!-- Mixin para definir a cor dos cubos amarelos -->
         <a-mixin id="yellowCube" geometry="primitive: box" material="color: yellow"></a-mixin>
+
+        <!-- Script para atualizar a posição dos cubos das mãos -->
+        <script>
+            AFRAME.registerComponent('update-hand-position', {
+                init: function () {
+                    this.el.sceneEl.addEventListener('controllersupdated', this.updatePosition.bind(this));
+                },
+                updatePosition: function () {
+                    var leftController = document.querySelector('[oculus-touch-controls="hand: left"]');
+                    var rightController = document.querySelector('[oculus-touch-controls="hand: right"]');
+                    var leftHand = document.querySelector('#leftHand');
+                    var rightHand = document.querySelector('#rightHand');
+
+                    leftHand.object3D.position.copy(leftController.object3D.position);
+                    rightHand.object3D.position.copy(rightController.object3D.position);
+                }
+            });
+        </script>
+        <!-- Componente para atualizar a posição das mãos -->
+        <a-entity update-hand-position></a-entity>
     </a-scene>
 </body>
 </html>
